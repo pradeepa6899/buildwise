@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildWise — Home Construction Budget Planner</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-header">
+      <h3 id="modalTitle">Information</h3>
+      <p id="modalSubtitle"></p>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-dark" id="modalOk">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo">Build<span>Wise</span></div>
+  <nav>
+    <a href="index.html" class="active">New Project</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="dashboard.html" class="btn nav-cta">View Dashboard →</a>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div>
+    <p class="hero-eyebrow">// Home Construction Planner</p>
+    <h1>Know your<br><em>exact costs</em><br>before you build.</h1>
+    <p>BuildWise breaks down every rupee of your home construction — from foundation cement to final coat of paint.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box">
+      <div class="stat-label">Avg. Cost Overrun Avoided</div>
+      <div class="stat-value"><span>₹</span>4.2L</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Materials Tracked</div>
+      <div class="stat-value">14<span>+</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Estimation Accuracy</div>
+      <div class="stat-value">97<span>%</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Houses Planned</div>
+      <div class="stat-value">2<span>k+</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- PROGRESS TRACK -->
+  <div class="progress-track">
+    <div class="progress-step" onclick="goToStep(1)">
+      <div class="step-num active" id="step-num-1">1</div>
+      <div class="step-info">
+        <div class="step-title active">Project Info</div>
+        <div class="step-desc">Basic details</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" onclick="goToStep(2)">
+      <div class="step-num" id="step-num-2">2</div>
+      <div class="step-info">
+        <div class="step-title" id="step-title-2">Structure</div>
+        <div class="step-desc">Foundation & walls</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" onclick="goToStep(3)">
+      <div class="step-num" id="step-num-3">3</div>
+      <div class="step-info">
+        <div class="step-title" id="step-title-3">Finishes</div>
+        <div class="step-desc">Flooring, paint, doors</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" onclick="goToStep(4)">
+      <div class="step-num" id="step-num-4">4</div>
+      <div class="step-info">
+        <div class="step-title" id="step-title-4">MEP & Extra</div>
+        <div class="step-desc">Plumbing, electrical</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" onclick="goToStep(5)">
+      <div class="step-num" id="step-num-5">5</div>
+      <div class="step-info">
+        <div class="step-title" id="step-title-5">Review</div>
+        <div class="step-desc">Summary & submit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 1: PROJECT INFO ══ -->
+  <div class="form-card active" id="form-step-1">
+    <div class="card-header">
+      <div class="card-header-left">
+        <h2>Project Information</h2>
+        <p>Tell us about the project owner and site location</p>
+      </div>
+      <div class="card-badge">Step 1 of 5</div>
+    </div>
+    <div class="card-body">
+      <div class="info-box"><span>📋</span> All fields marked * are mandatory. Estimates based on Tamil Nadu market rates.</div>
+
+      <div class="form-section-label">Owner Details</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="ownerName" placeholder="e.g. Rajesh Kumar">
+          <div class="field-error" id="err-ownerName">Please enter the owner's full name</div>
+        </div>
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="ownerPhone" placeholder="10-digit mobile number" maxlength="10">
+          <div class="field-error" id="err-ownerPhone">Enter a valid 10-digit phone number</div>
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="ownerEmail" placeholder="you@example.com">
+          <div class="field-error" id="err-ownerEmail">Enter a valid email address</div>
+        </div>
+        <div class="field">
+          <label>Project Name <span class="req">*</span></label>
+          <input type="text" id="projectName" placeholder="e.g. My Dream Home 2025">
+          <div class="field-error" id="err-projectName">Give your project a name</div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Site Location</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>City / Town <span class="req">*</span></label>
+          <input type="text" id="city" placeholder="e.g. Madurai">
+          <div class="field-error" id="err-city">Please enter the city</div>
+        </div>
+        <div class="field">
+          <label>District <span class="req">*</span></label>
+          <select id="district">
+            <option value="">Select district</option>
+            <option>Madurai</option><option>Chennai</option><option>Coimbatore</option>
+            <option>Tiruchirappalli</option><option>Salem</option><option>Tirunelveli</option>
+            <option>Erode</option><option>Vellore</option><option>Thoothukudi</option>
+            <option>Dindigul</option><option>Other</option>
+          </select>
+          <div class="field-error" id="err-district">Select a district</div>
+        </div>
+        <div class="field">
+          <label>Plot Area (sq.ft.) <span class="req">*</span></label>
+          <div class="input-unit">
+            <input type="number" id="plotArea" placeholder="e.g. 1200" min="100" max="50000">
+            <div class="unit-suffix">sq.ft</div>
+          </div>
+          <div class="field-error" id="err-plotArea">Enter valid plot area (100–50000)</div>
+        </div>
+        <div class="field">
+          <label>Built-up Area per Floor (sq.ft.) <span class="req">*</span></label>
+          <div class="input-unit">
+            <input type="number" id="builtupArea" placeholder="e.g. 1000" min="200" max="10000">
+            <div class="unit-suffix">sq.ft</div>
+          </div>
+          <div class="field-error" id="err-builtupArea">Enter area between 200–10000</div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Configuration</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>House Type <span class="req">*</span></label>
+          <div class="radio-group" id="houseType">
+            <div class="radio-item selected" data-val="individual"><input type="radio" name="houseType" value="individual" checked><div class="radio-label">Individual</div><div class="radio-sub">Standalone</div></div>
+            <div class="radio-item" data-val="duplex"><input type="radio" name="houseType" value="duplex"><div class="radio-label">Duplex</div><div class="radio-sub">2-unit</div></div>
+            <div class="radio-item" data-val="villa"><input type="radio" name="houseType" value="villa"><div class="radio-label">Villa</div><div class="radio-sub">Premium</div></div>
+            <div class="radio-item" data-val="apartment"><input type="radio" name="houseType" value="apartment"><div class="radio-label">Apartment</div><div class="radio-sub">Multi-unit</div></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Number of Floors</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('floors',-1)">−</button>
+            <input type="number" id="floors" value="1" min="1" max="5" readonly>
+            <button class="counter-btn" onclick="changeCounter('floors',1)">+</button>
+          </div>
+          <div class="field-hint">G = 1, G+1 = 2, etc.</div>
+        </div>
+        <div class="field">
+          <label>Bedrooms</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('bedrooms',-1)">−</button>
+            <input type="number" id="bedrooms" value="2" min="1" max="10" readonly>
+            <button class="counter-btn" onclick="changeCounter('bedrooms',1)">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Bathrooms</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('bathrooms',-1)">−</button>
+            <input type="number" id="bathrooms" value="2" min="1" max="10" readonly>
+            <button class="counter-btn" onclick="changeCounter('bathrooms',1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Timeline</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Start Date <span class="req">*</span></label>
+          <input type="date" id="startDate">
+          <div class="field-error" id="err-startDate">Select a future start date</div>
+        </div>
+        <div class="field">
+          <label>Target Completion</label>
+          <div class="range-wrap">
+            <input type="range" id="durationMonths" min="6" max="36" value="18" oninput="updateRangeLabel('durationMonths','durationLabel',' months')">
+            <div class="range-labels">
+              <span>6 mo</span>
+              <span id="durationLabel" style="color:var(--accent);font-weight:600">18 months</span>
+              <span>36 mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label>Special Notes</label>
+          <textarea id="specialNotes" placeholder="e.g. Earthquake-resistant design, solar panels..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-ghost" onclick="showInfo()">ℹ About Estimates</button>
+      <button class="btn btn-primary" onclick="nextStep(1)">Continue to Structure →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2: STRUCTURE (with AJAX Price Fetcher) ══ -->
+  <div class="form-card" id="form-step-2">
+    <div class="card-header">
+      <div class="card-header-left">
+        <h2>Structure & Foundation</h2>
+        <p>Civil work — the backbone of your home</p>
+      </div>
+      <div class="card-badge">Step 2 of 5</div>
+    </div>
+    <div class="card-body">
+
+      <!-- AJAX LIVE PRICE FETCHER PANEL -->
+      <div class="price-fetcher-panel">
+        <div class="pf-top">
+          <div class="pf-title-wrap">
+            <div class="pf-icon">📡</div>
+            <div>
+              <div class="pf-title">Live Market Price Fetcher — jQuery AJAX</div>
+              <div class="pf-sub">Click to fetch current Tamil Nadu material rates and auto-fill all price fields below</div>
+            </div>
+          </div>
+          <div class="pf-status">
+            <div class="pf-dot" id="pfDot"></div>
+            <span id="pfStatusText">Ready</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <button class="btn-fetch" id="btnFetchPrices">
+            <div class="spinner" id="fetchSpinner"></div>
+            <span id="fetchBtnText">⬇ Fetch Live Prices</span>
+          </button>
+          <button class="btn-reset-prices" id="btnResetPrices">↺ Reset to Default</button>
+        </div>
+        <div class="fetched-prices-grid" id="fetchedPricesGrid">
+          <div class="price-chip" id="chip-cement"><div class="pc-mat">Cement</div><div class="pc-val" id="chip-cement-val">—</div><div class="pc-unit">per 50kg bag</div><span class="pc-trend" id="chip-cement-trend"></span></div>
+          <div class="price-chip" id="chip-brick"><div class="pc-mat">Bricks</div><div class="pc-val" id="chip-brick-val">—</div><div class="pc-unit">per 1000 nos.</div><span class="pc-trend" id="chip-brick-trend"></span></div>
+          <div class="price-chip" id="chip-steel"><div class="pc-mat">Steel (Fe500)</div><div class="pc-val" id="chip-steel-val">—</div><div class="pc-unit">per metric ton</div><span class="pc-trend" id="chip-steel-trend"></span></div>
+          <div class="price-chip" id="chip-sand"><div class="pc-mat">M-Sand</div><div class="pc-val" id="chip-sand-val">—</div><div class="pc-unit">per cu.ft</div><span class="pc-trend" id="chip-sand-trend"></span></div>
+          <div class="price-chip" id="chip-jelly"><div class="pc-mat">Jelly</div><div class="pc-val" id="chip-jelly-val">—</div><div class="pc-unit">per cu.ft</div><span class="pc-trend" id="chip-jelly-trend"></span></div>
+        </div>
+        <button class="log-toggle" id="logToggle">▶ Show AJAX Log</button>
+        <div class="ajax-log" id="ajaxLog"></div>
+        <div class="last-updated-badge" id="lastUpdatedBadge">
+          <span style="color:#22C55E">●</span>
+          <span id="lastUpdatedText">Prices last synced: —</span>
+        </div>
+      </div>
+
+      <div class="form-section-label">Foundation Type</div>
+      <div class="form-grid full">
+        <div class="field">
+          <label>Foundation <span class="req">*</span></label>
+          <div class="radio-group" id="foundationType">
+            <div class="radio-item selected" data-val="isolated"><input type="radio" name="foundation" value="isolated" checked><div class="radio-label">Isolated Footing</div><div class="radio-sub">Standard</div></div>
+            <div class="radio-item" data-val="strip"><input type="radio" name="foundation" value="strip"><div class="radio-label">Strip Foundation</div><div class="radio-sub">Load-bearing</div></div>
+            <div class="radio-item" data-val="raft"><input type="radio" name="foundation" value="raft"><div class="radio-label">Raft / Mat</div><div class="radio-sub">Soft soil</div></div>
+            <div class="radio-item" data-val="pile"><input type="radio" name="foundation" value="pile"><div class="radio-label">Pile Foundation</div><div class="radio-sub">Deep soil</div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Cement</div>
+      <div class="form-grid three">
+        <div class="field">
+          <label>Cement Grade <span class="req">*</span></label>
+          <select id="cementGrade" onchange="updateEstimate()">
+            <option value="">Select grade</option>
+            <option value="33">33 Grade (Economy)</option>
+            <option value="43" selected>43 Grade (Standard)</option>
+            <option value="53">53 Grade (Premium)</option>
+          </select>
+          <div class="field-error" id="err-cementGrade">Select cement grade</div>
+        </div>
+        <div class="field">
+          <label>Bags Required (Auto)</label>
+          <div class="input-unit">
+            <input type="number" id="cementBags" placeholder="Auto" readonly style="background:#F0EDE8;cursor:not-allowed">
+            <div class="unit-suffix">bags</div>
+          </div>
+          <div class="field-hint">Calculated from built-up area</div>
+        </div>
+        <div class="field">
+          <label>Price per Bag (₹) <span class="req">*</span></label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="cementPrice" value="380" min="200" max="700" onchange="updateEstimate()">
+          </div>
+          <div class="field-error" id="err-cementPrice">Enter valid price</div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Bricks & Blocks</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Wall Material <span class="req">*</span></label>
+          <select id="wallMaterial" onchange="updateEstimate()">
+            <option value="">Select material</option>
+            <option value="country_brick" selected>Country Brick</option>
+            <option value="fly_ash">Fly Ash Brick</option>
+            <option value="aac_block">AAC Block</option>
+            <option value="concrete_block">Concrete Block</option>
+            <option value="red_brick">Red Brick</option>
+          </select>
+          <div class="field-error" id="err-wallMaterial">Select wall material</div>
+        </div>
+        <div class="field">
+          <label>Wall Thickness</label>
+          <select id="wallThickness" onchange="updateEstimate()">
+            <option value="4.5">4.5 inch (Interior)</option>
+            <option value="9" selected>9 inch (Exterior)</option>
+            <option value="12">12 inch (Load bearing)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Estimated Bricks (Auto)</label>
+          <div class="input-unit">
+            <input type="number" id="brickCount" placeholder="Auto" readonly style="background:#F0EDE8;cursor:not-allowed">
+            <div class="unit-suffix">nos.</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Price per 1000 units (₹)</label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="brickPrice" value="7500" onchange="updateEstimate()">
+          </div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Steel & Reinforcement</div>
+      <div class="form-grid three">
+        <div class="field">
+          <label>Steel Grade</label>
+          <select id="steelGrade" onchange="updateEstimate()">
+            <option value="Fe415">Fe 415</option>
+            <option value="Fe500" selected>Fe 500</option>
+            <option value="Fe550">Fe 550</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Steel MT (Auto)</label>
+          <div class="input-unit">
+            <input type="number" id="steelMT" placeholder="Auto" readonly style="background:#F0EDE8;cursor:not-allowed">
+            <div class="unit-suffix">MT</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Steel Price per MT (₹)</label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="steelPrice" value="65000" onchange="updateEstimate()">
+          </div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Sand & Aggregate</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Sand Type</label>
+          <select id="sandType" onchange="updateEstimate()">
+            <option value="river">River Sand</option>
+            <option value="msand" selected>M-Sand</option>
+            <option value="psand">P-Sand</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Sand Qty (Auto)</label>
+          <div class="input-unit">
+            <input type="number" id="sandQty" placeholder="Auto" readonly style="background:#F0EDE8;cursor:not-allowed">
+            <div class="unit-suffix">cu.ft</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Sand Price / cu.ft (₹)</label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="sandPrice" value="55" onchange="updateEstimate()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Jelly Price / cu.ft (₹)</label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="jellyPrice" value="40" onchange="updateEstimate()">
+          </div>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Roofing</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Roof Type <span class="req">*</span></label>
+          <select id="roofType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="rcc_slab" selected>RCC Flat Slab</option>
+            <option value="mangalore">Mangalore Tile</option>
+            <option value="sheet">Metal / Sheet</option>
+            <option value="concrete_tile">Concrete Tile</option>
+          </select>
+          <div class="field-error" id="err-roofType">Select roof type</div>
+        </div>
+        <div class="field">
+          <label>Waterproofing?</label>
+          <div class="radio-group" id="waterproofing">
+            <div class="radio-item selected" data-val="yes"><input type="radio" name="waterproof" value="yes" checked><div class="radio-label">Yes</div></div>
+            <div class="radio-item" data-val="no"><input type="radio" name="waterproof" value="no"><div class="radio-label">No</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-outline" onclick="prevStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="nextStep(2)">Continue to Finishes →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3: FINISHES ══ -->
+  <div class="form-card" id="form-step-3">
+    <div class="card-header">
+      <div class="card-header-left"><h2>Finishes & Interior</h2><p>Flooring, paint, doors, windows</p></div>
+      <div class="card-badge">Step 3 of 5</div>
+    </div>
+    <div class="card-body">
+      <div class="form-section-label">Flooring</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Flooring Type <span class="req">*</span></label>
+          <select id="flooringType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="vitrified" selected>Vitrified Tiles</option>
+            <option value="ceramic">Ceramic Tiles</option>
+            <option value="marble">Marble</option>
+            <option value="granite">Granite</option>
+            <option value="wooden">Wooden</option>
+            <option value="kota">Kota Stone</option>
+          </select>
+          <div class="field-error" id="err-flooringType">Select flooring type</div>
+        </div>
+        <div class="field">
+          <label>Flooring Rate (₹/sq.ft)</label>
+          <div class="input-unit">
+            <div class="unit-prefix">₹</div>
+            <input type="number" id="flooringRate" value="85" onchange="updateEstimate()">
+          </div>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Painting</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Interior Paint <span class="req">*</span></label>
+          <select id="paintInterior" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="economy">Economy</option>
+            <option value="standard" selected>Standard</option>
+            <option value="premium">Premium</option>
+            <option value="luxury">Luxury</option>
+          </select>
+          <div class="field-error" id="err-paintInterior">Select paint type</div>
+        </div>
+        <div class="field">
+          <label>Exterior Paint <span class="req">*</span></label>
+          <select id="paintExterior" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="cement_primer">Cement Primer</option>
+            <option value="standard" selected>Weather Coat</option>
+            <option value="premium">Weather Shield</option>
+          </select>
+          <div class="field-error" id="err-paintExterior">Select exterior paint</div>
+        </div>
+        <div class="field">
+          <label>Number of Coats</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('paintCoats',-1)">−</button>
+            <input type="number" id="paintCoats" value="2" min="1" max="4" readonly>
+            <button class="counter-btn" onclick="changeCounter('paintCoats',1)">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Putty / Primer</label>
+          <select id="puttyType" onchange="updateEstimate()">
+            <option value="none">None</option>
+            <option value="putty" selected>Wall Putty + Primer</option>
+            <option value="pu">PU Primer</option>
+          </select>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Doors & Windows</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Main Door Type <span class="req">*</span></label>
+          <select id="mainDoorType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="teak">Teak Wood</option>
+            <option value="hardwood" selected>Hardwood</option>
+            <option value="engineered">Engineered Wood</option>
+            <option value="steel">Steel Door</option>
+            <option value="fibre">Fibre Door</option>
+          </select>
+          <div class="field-error" id="err-mainDoorType">Select door type</div>
+        </div>
+        <div class="field">
+          <label>Bedroom Door</label>
+          <select id="bedroomDoorType" onchange="updateEstimate()">
+            <option value="plywood" selected>Plywood Flush</option>
+            <option value="hollow">Hollow Core</option>
+            <option value="solid">Solid Wood</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Window Type <span class="req">*</span></label>
+          <select id="windowType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="aluminum" selected>Aluminium</option>
+            <option value="upvc">uPVC</option>
+            <option value="wood">Wooden</option>
+            <option value="steel">Steel</option>
+          </select>
+          <div class="field-error" id="err-windowType">Select window type</div>
+        </div>
+        <div class="field">
+          <label>Number of Windows</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('windowCount',-1)">−</button>
+            <input type="number" id="windowCount" value="8" min="1" max="40" readonly>
+            <button class="counter-btn" onclick="changeCounter('windowCount',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Interior Features</div>
+      <div class="form-grid full">
+        <div class="field">
+          <div class="check-group">
+            <label class="check-item checked"><input type="checkbox" value="false_ceiling" checked onchange="handleCheckbox(this)"><span class="check-label">False Ceiling</span></label>
+            <label class="check-item"><input type="checkbox" value="modular_kitchen" onchange="handleCheckbox(this)"><span class="check-label">Modular Kitchen</span></label>
+            <label class="check-item"><input type="checkbox" value="wardrobes" onchange="handleCheckbox(this)"><span class="check-label">Built-in Wardrobes</span></label>
+            <label class="check-item"><input type="checkbox" value="staircase_railing" onchange="handleCheckbox(this)"><span class="check-label">Staircase Railing</span></label>
+            <label class="check-item"><input type="checkbox" value="grilles" onchange="handleCheckbox(this)"><span class="check-label">Window Grilles</span></label>
+            <label class="check-item"><input type="checkbox" value="sunshade" onchange="handleCheckbox(this)"><span class="check-label">Sunshade</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-outline" onclick="prevStep(3)">← Back</button>
+      <button class="btn btn-primary" onclick="nextStep(3)">Continue to MEP →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4: MEP & EXTRAS ══ -->
+  <div class="form-card" id="form-step-4">
+    <div class="card-header">
+      <div class="card-header-left"><h2>MEP, Furniture & Extras</h2><p>Plumbing, electrical, sanitary, furniture</p></div>
+      <div class="card-badge">Step 4 of 5</div>
+    </div>
+    <div class="card-body">
+      <div class="form-section-label">Plumbing</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Pipe Material <span class="req">*</span></label>
+          <select id="pipeType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="cpvc" selected>CPVC</option>
+            <option value="upvc">uPVC</option>
+            <option value="ppr">PPR</option>
+            <option value="gi">GI</option>
+          </select>
+          <div class="field-error" id="err-pipeType">Select pipe material</div>
+        </div>
+        <div class="field">
+          <label>Sanitary Fittings</label>
+          <select id="sanitaryQuality" onchange="updateEstimate()">
+            <option value="economy">Economy</option>
+            <option value="standard" selected>Standard</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Water Storage</label>
+          <select id="waterStorage" onchange="updateEstimate()">
+            <option value="sump_ohwt" selected>Sump + Overhead Tank</option>
+            <option value="sump_only">Sump Only</option>
+            <option value="borewell">Borewell + Storage</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Drainage System</label>
+          <select id="drainageType" onchange="updateEstimate()">
+            <option value="standard" selected>Standard PVC</option>
+            <option value="stormwater">Storm Water Drain</option>
+            <option value="stp">STP</option>
+          </select>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Electrical</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Wiring Type <span class="req">*</span></label>
+          <select id="wiringType" onchange="updateEstimate()">
+            <option value="">Select</option>
+            <option value="standard" selected>Standard Copper</option>
+            <option value="concealed">Full Concealed</option>
+            <option value="premium">Premium</option>
+          </select>
+          <div class="field-error" id="err-wiringType">Select wiring type</div>
+        </div>
+        <div class="field">
+          <label>Switch Brand</label>
+          <select id="switchBrand" onchange="updateEstimate()">
+            <option value="economy">Economy</option>
+            <option value="standard" selected>Standard</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Light Points</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('lightPoints',-1)">−</button>
+            <input type="number" id="lightPoints" value="20" min="5" max="100" readonly>
+            <button class="counter-btn" onclick="changeCounter('lightPoints',1)">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Power Points</label>
+          <div class="counter-input">
+            <button class="counter-btn" onclick="changeCounter('powerPoints',-1)">−</button>
+            <input type="number" id="powerPoints" value="15" min="5" max="80" readonly>
+            <button class="counter-btn" onclick="changeCounter('powerPoints',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Electrical Extras</div>
+      <div class="form-grid full">
+        <div class="field">
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" value="solar" onchange="handleCheckbox(this)"><span class="check-label">Solar Panel (3kW)</span></label>
+            <label class="check-item checked"><input type="checkbox" value="inverter" checked onchange="handleCheckbox(this)"><span class="check-label">Inverter / UPS</span></label>
+            <label class="check-item"><input type="checkbox" value="cctv" onchange="handleCheckbox(this)"><span class="check-label">CCTV Cameras</span></label>
+            <label class="check-item"><input type="checkbox" value="intercom" onchange="handleCheckbox(this)"><span class="check-label">Video Intercom</span></label>
+            <label class="check-item"><input type="checkbox" value="home_theater" onchange="handleCheckbox(this)"><span class="check-label">Home Theatre</span></label>
+            <label class="check-item"><input type="checkbox" value="smart_home" onchange="handleCheckbox(this)"><span class="check-label">Smart Home</span></label>
+          </div>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Furniture & External Works</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Furniture Budget</label>
+          <select id="furnitureBudget" onchange="updateEstimate()">
+            <option value="none">Not Included</option>
+            <option value="basic">Basic — ₹2–5L</option>
+            <option value="standard" selected>Standard — ₹5–10L</option>
+            <option value="premium">Premium — ₹10–20L</option>
+            <option value="luxury">Luxury — ₹20L+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Kitchen Appliances</label>
+          <select id="kitchenAppliances" onchange="updateEstimate()">
+            <option value="none">None</option>
+            <option value="basic">Basic</option>
+            <option value="standard" selected>Standard</option>
+            <option value="premium">Full Modular</option>
+          </select>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">External Works</div>
+      <div class="form-grid full">
+        <div class="field">
+          <div class="check-group">
+            <label class="check-item checked"><input type="checkbox" value="compound_wall" checked onchange="handleCheckbox(this)"><span class="check-label">Compound Wall</span></label>
+            <label class="check-item"><input type="checkbox" value="gate" onchange="handleCheckbox(this)"><span class="check-label">Main Gate</span></label>
+            <label class="check-item checked"><input type="checkbox" value="driveway" checked onchange="handleCheckbox(this)"><span class="check-label">Driveway</span></label>
+            <label class="check-item"><input type="checkbox" value="garden" onchange="handleCheckbox(this)"><span class="check-label">Garden / Landscaping</span></label>
+            <label class="check-item"><input type="checkbox" value="parking_shade" onchange="handleCheckbox(this)"><span class="check-label">Car Parking Shade</span></label>
+            <label class="check-item"><input type="checkbox" value="septic_tank" onchange="handleCheckbox(this)"><span class="check-label">Septic Tank</span></label>
+          </div>
+        </div>
+      </div>
+      <hr class="form-divider">
+      <div class="form-section-label">Labour & Fees</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Labour Type</label>
+          <select id="labourType" onchange="updateEstimate()">
+            <option value="daily">Daily Labour</option>
+            <option value="contract" selected>Contract Labour</option>
+            <option value="full_turnkey">Full Turnkey</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Architect Fees?</label>
+          <div class="radio-group" id="archFees">
+            <div class="radio-item selected" data-val="yes"><input type="radio" name="archFees" value="yes" checked><div class="radio-label">Yes (4%)</div></div>
+            <div class="radio-item" data-val="no"><input type="radio" name="archFees" value="no"><div class="radio-label">No</div></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Contingency Buffer</label>
+          <select id="contingency" onchange="updateEstimate()">
+            <option value="0.05">5%</option>
+            <option value="0.1" selected>10% (Recommended)</option>
+            <option value="0.15">15%</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>GST</label>
+          <div class="radio-group" id="gstRadio">
+            <div class="radio-item selected" data-val="yes"><input type="radio" name="gst" value="yes" checked><div class="radio-label">Include GST</div></div>
+            <div class="radio-item" data-val="no"><input type="radio" name="gst" value="no"><div class="radio-label">Exclude GST</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-outline" onclick="prevStep(4)">← Back</button>
+      <button class="btn btn-primary" onclick="nextStep(4)">Review Summary →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 5: REVIEW ══ -->
+  <div class="form-card" id="form-step-5">
+    <div class="card-header">
+      <div class="card-header-left"><h2>Budget Summary</h2><p>Review your complete home construction estimate</p></div>
+      <div class="card-badge">Step 5 of 5</div>
+    </div>
+    <div class="card-body" id="summaryBody"></div>
+    <div class="form-nav">
+      <button class="btn btn-outline" onclick="prevStep(5)">← Edit Details</button>
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-outline" onclick="window.print()">🖨 Print</button>
+        <button class="btn btn-dark" onclick="saveDashboard()">Save to Dashboard →</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── LIVE ESTIMATE BAR ── -->
+<div class="live-estimate">
+  <div>
+    <div class="est-label">Live Construction Estimate</div>
+    <div class="est-amount"><span>₹</span><span id="totalAmt">0</span></div>
+  </div>
+  <div class="est-breakdown">
+    <div class="est-item"><div class="est-item-label">Structure</div><div class="est-item-val" id="est-structure">₹0</div></div>
+    <div class="est-item"><div class="est-item-label">Finishes</div><div class="est-item-val" id="est-finishes">₹0</div></div>
+    <div class="est-item"><div class="est-item-label">MEP</div><div class="est-item-val" id="est-mep">₹0</div></div>
+    <div class="est-item"><div class="est-item-label">Extras</div><div class="est-item-val" id="est-extras">₹0</div></div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script src="index.js"></script>
+
+</body>
+</html>

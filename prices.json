@@ -1,0 +1,113 @@
+{
+  "last_updated": "2025-06-15",
+  "region": "Tamil Nadu",
+  "currency": "INR",
+  "source": "BuildWise Market Data",
+  "prices": {
+    "cement_43": {
+      "name": "OPC Cement 43 Grade",
+      "unit": "per 50kg bag",
+      "price": 395,
+      "trend": "stable",
+      "change": 0
+    },
+    "cement_53": {
+      "name": "OPC Cement 53 Grade",
+      "unit": "per 50kg bag",
+      "price": 430,
+      "trend": "up",
+      "change": 15
+    },
+    "cement_33": {
+      "name": "OPC Cement 33 Grade",
+      "unit": "per 50kg bag",
+      "price": 360,
+      "trend": "down",
+      "change": -10
+    },
+    "brick_country": {
+      "name": "Country Brick",
+      "unit": "per 1000 nos.",
+      "price": 7800,
+      "trend": "up",
+      "change": 300
+    },
+    "brick_flyash": {
+      "name": "Fly Ash Brick",
+      "unit": "per 1000 nos.",
+      "price": 7200,
+      "trend": "stable",
+      "change": 0
+    },
+    "brick_aac": {
+      "name": "AAC Block",
+      "unit": "per 1000 nos.",
+      "price": 9500,
+      "trend": "up",
+      "change": 500
+    },
+    "brick_red": {
+      "name": "Red Brick",
+      "unit": "per 1000 nos.",
+      "price": 8200,
+      "trend": "stable",
+      "change": 0
+    },
+    "brick_concrete": {
+      "name": "Concrete Block",
+      "unit": "per 1000 nos.",
+      "price": 10500,
+      "trend": "up",
+      "change": 200
+    },
+    "steel_fe500": {
+      "name": "TMT Steel Fe500",
+      "unit": "per metric ton",
+      "price": 64500,
+      "trend": "down",
+      "change": -1500
+    },
+    "steel_fe415": {
+      "name": "TMT Steel Fe415",
+      "unit": "per metric ton",
+      "price": 61000,
+      "trend": "down",
+      "change": -1000
+    },
+    "steel_fe550": {
+      "name": "TMT Steel Fe550",
+      "unit": "per metric ton",
+      "price": 68000,
+      "trend": "stable",
+      "change": 0
+    },
+    "sand_msand": {
+      "name": "M-Sand (Manufactured)",
+      "unit": "per cu.ft",
+      "price": 52,
+      "trend": "stable",
+      "change": 0
+    },
+    "sand_river": {
+      "name": "River Sand",
+      "unit": "per cu.ft",
+      "price": 78,
+      "trend": "up",
+      "change": 8
+    },
+    "sand_psand": {
+      "name": "P-Sand (Plastering)",
+      "unit": "per cu.ft",
+      "price": 48,
+      "trend": "stable",
+      "change": 0
+    },
+    "jelly": {
+      "name": "Jelly / 20mm Aggregate",
+      "unit": "per cu.ft",
+      "price": 42,
+      "trend": "stable",
+      "change": 0
+    }
+  }
+}

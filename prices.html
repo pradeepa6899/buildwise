@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildWise — Live Material Price Fetcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="prices.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<header>
+  <div class="logo">Build<span>Wise</span></div>
+  <nav>
+    <a href="index.html">New Project</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="prices.html" class="active">Live Prices</a>
+    <a href="index.html" class="nav-cta">+ New Budget</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <div>
+    <div class="hero-eyebrow">// jQuery AJAX — Live Data Fetch</div>
+    <h1>Material Price Fetcher</h1>
+    <p>Fetch real-time construction material rates for Tamil Nadu using jQuery AJAX. Prices load from a mock JSON API and can be saved to your project budget.</p>
+  </div>
+  <div class="hero-api-box">
+    <div class="hero-api-label">API Endpoint</div>
+    <div class="hero-api-endpoint">GET → prices.json</div>
+    <div class="hero-api-meta">dataType: json &nbsp;|&nbsp; timeout: 8000ms</div>
+  </div>
+</div>
+
+<div class="status-row">
+  <div class="status-left">
+    <div class="status-dot" id="statusDot"></div>
+    <div>
+      <div class="status-text" id="statusText"><strong>Ready</strong> — Click Fetch to load prices</div>
+      <div class="status-meta" id="statusMeta">Source: prices.json &nbsp;|&nbsp; Region: Tamil Nadu, India</div>
+    </div>
+  </div>
+  <div class="countdown-wrap" id="countdownWrap">
+    <div class="countdown-ring">
+      <svg viewBox="0 0 24 24" width="28" height="28">
+        <circle cx="12" cy="12" r="11"/>
+        <circle class="progress" id="countdownRing" cx="12" cy="12" r="11"/>
+      </svg>
+    </div>
+    <div>
+      <div class="countdown-label">Auto-refresh in</div>
+      <div id="countdownNum">30s</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls-bar">
+  <button class="btn-fetch" id="btnFetch">
+    <div class="spinner" id="fetchSpinner"></div>
+    <span id="fetchBtnText">⬇ Fetch Live Prices</span>
+  </button>
+  <button class="btn-outline" id="btnAutoRefresh">⏱ Enable Auto-Refresh (30s)</button>
+  <button class="btn-outline" id="btnClearLog">🗑 Clear Log</button>
+  <div class="controls-spacer"></div>
+  <input type="text" class="search-input" id="searchInput" placeholder="Search material..." oninput="filterCards(this.value)">
+  <select class="filter-select" id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="cement">Cement</option>
+    <option value="brick">Bricks / Blocks</option>
+    <option value="steel">Steel</option>
+    <option value="sand">Sand & Aggregate</option>
+  </select>
+  <select class="filter-select" id="trendFilter">
+    <option value="all">All Trends</option>
+    <option value="up">↑ Rising</option>
+    <option value="down">↓ Falling</option>
+    <option value="stable">→ Stable</option>
+  </select>
+</div>
+
+<div class="page-body">
+
+  <!-- LEFT: CARDS -->
+  <div class="left-panel">
+    <div class="sec-label-top">Tamil Nadu Construction Market</div>
+    <div class="sec-title-top">Material Rates</div>
+    <div class="sec-sub-top">
+      Prices fetched via <code>$.ajax()</code> from <code>prices.json</code> — click Fetch to load
+    </div>
+
+    <div class="cat-tabs">
+      <div class="cat-tab active" onclick="filterByCategory('all'); setActiveTab(this)">All</div>
+      <div class="cat-tab" onclick="filterByCategory('cement'); setActiveTab(this)">Cement</div>
+      <div class="cat-tab" onclick="filterByCategory('brick'); setActiveTab(this)">Bricks</div>
+      <div class="cat-tab" onclick="filterByCategory('steel'); setActiveTab(this)">Steel</div>
+      <div class="cat-tab" onclick="filterByCategory('sand'); setActiveTab(this)">Sand & Jelly</div>
+    </div>
+
+    <div class="prices-grid" id="pricesGrid">
+      <!-- Skeleton cards — replaced after fetch -->
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+      <div class="price-card"><div class="skeleton skel-label"></div><div class="skeleton skel-name"></div><div class="skeleton skel-price"></div><div class="skeleton skel-tag"></div><div class="skeleton skel-btn"></div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-card-title">📡 AJAX Request Log</div>
+        <div style="font-family:var(--mono);font-size:0.62rem;color:var(--text-muted)" id="logCount">2 entries</div>
+      </div>
+      <div class="ajax-log-box" id="ajaxLog">
+        <div class="log-line info">[system] BuildWise Price Fetcher ready.</div>
+        <div class="log-line">[system] Click "Fetch Live Prices" to start.</div>
+      </div>
+      <div class="req-info">
+        Method: <span>GET</span> &nbsp;|&nbsp; URL: <span>prices.json</span><br>
+        dataType: <span>json</span> &nbsp;|&nbsp; Timeout: <span>8000ms</span><br>
+        jQuery: <span>v3.7.1</span>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-card-title">📊 Price Summary</div>
+      </div>
+      <div class="summary-body">
+        <div class="summary-row"><span class="summary-label">Status</span><span class="summary-value" id="sum-status">Not fetched</span></div>
+        <div class="summary-row"><span class="summary-label">Materials Loaded</span><span class="summary-value" id="sum-count">0 / 15</span></div>
+        <div class="summary-row"><span class="summary-label">Rising Prices</span><span class="summary-value up" id="sum-up">—</span></div>
+        <div class="summary-row"><span class="summary-label">Falling Prices</span><span class="summary-value down" id="sum-down">—</span></div>
+        <div class="summary-row"><span class="summary-label">Stable Prices</span><span class="summary-value" id="sum-stable">—</span></div>
+        <div class="summary-row"><span class="summary-label">Saved to Project</span><span class="summary-value success" id="sum-saved">0 prices</span></div>
+        <div class="summary-row"><span class="summary-label">Last Fetched</span><span class="summary-value" id="sum-time">—</span></div>
+      </div>
+      <div class="apply-all-wrap">
+        <button class="btn-apply-all" id="btnApplyAll" disabled>✓ Apply All Prices to Project</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="prices.js"></script>
+</body>
+</html>
